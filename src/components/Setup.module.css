@@ -1,0 +1,98 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 1rem;
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 2.5rem 2rem;
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.header {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.logo {
+  font-size: 3rem;
+  line-height: 1;
+}
+
+.title {
+  font-size: 1.8rem;
+  color: var(--gold);
+}
+
+.subtitle {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.countRow {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.countBtn {
+  flex: 1;
+  padding: 0.6rem;
+  background: var(--card-light);
+  color: var(--text-muted);
+  border: 1.5px solid var(--border);
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.countBtn:hover {
+  border-color: var(--text-muted);
+  color: var(--text);
+}
+
+.countBtnActive {
+  background: var(--green-dark);
+  border-color: var(--green-light);
+  color: #4ade80;
+}
+
+.inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.inputs input {
+  width: 100%;
+}
+
+.startBtn {
+  width: 100%;
+  padding: 0.8rem;
+  font-size: 1.05rem;
+}

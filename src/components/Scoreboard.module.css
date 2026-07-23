@@ -1,0 +1,281 @@
+.container {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.titleRow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.logo { font-size: 2rem; }
+
+.title {
+  font-size: 1.4rem;
+  color: var(--gold);
+  line-height: 1.1;
+}
+
+.roundCount {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+/* ── Podium ──────────────────────────────────────────── */
+
+.podiumWrap {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.podiumSpot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+}
+
+.podiumInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  padding-bottom: 0.6rem;
+}
+
+.podiumMedal {
+  font-size: 1.8rem;
+  line-height: 1;
+}
+
+.podiumName {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text);
+  text-align: center;
+  max-width: 9rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.podiumScore {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.podiumBlock {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  font-weight: 800;
+  border-radius: 10px 10px 4px 4px;
+  color: #0f172a;
+}
+
+/* rank 1: gold, tallest */
+.podiumBlock1 {
+  height: 88px;
+  background: linear-gradient(160deg, #f4d03f, #d4af37);
+  box-shadow: 0 4px 20px rgba(212, 175, 55, 0.4);
+}
+
+/* rank 2: silver, medium */
+.podiumBlock2 {
+  height: 64px;
+  background: linear-gradient(160deg, #e2e8f0, #94a3b8);
+  box-shadow: 0 4px 14px rgba(148, 163, 184, 0.3);
+}
+
+/* rank 3: bronze, shortest */
+.podiumBlock3 {
+  height: 44px;
+  background: linear-gradient(160deg, #e2a87a, #cd7f32);
+  box-shadow: 0 4px 10px rgba(205, 127, 50, 0.3);
+}
+
+/* top-ranked player gets slightly larger medal/name */
+.podiumSpotTop .podiumName { font-size: 1.05rem; }
+.podiumSpotTop .podiumMedal { font-size: 2.2rem; }
+
+/* ── Below-podium list (4th place+) ─────────────────── */
+
+.standings {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.standingRow {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.9rem 1.2rem;
+  transition: border-color 0.15s;
+}
+
+.leader {
+  border-color: var(--gold);
+  background: linear-gradient(135deg, #1e293b 0%, #1f2c1a 100%);
+}
+
+.rank {
+  font-size: 1.1rem;
+  width: 2.2rem;
+  text-align: center;
+  color: var(--text-muted);
+  font-weight: 700;
+}
+
+.playerName {
+  flex: 1;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.totalScore {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.positive { color: #4ade80; }
+.negative { color: #f87171; }
+
+/* ── Round history ───────────────────────────────────── */
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.sectionTitle {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+}
+
+.historyTable {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.historyHeader, .historyRow {
+  display: grid;
+  gap: 0;
+}
+
+.historyRow {
+  border-top: 1px solid var(--border);
+}
+
+.historyHeader {
+  background: var(--card-light);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.roundLabel {
+  padding: 0.6rem 0.8rem;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+}
+
+.historyCell {
+  padding: 0.6rem 0.8rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.breakdown {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.2rem;
+}
+
+.pos { color: #4ade80; }
+.neg { color: #f87171; }
+.royaltyNA { color: var(--border); }
+
+.totalRow {
+  background: var(--card-light);
+  font-weight: 700;
+}
+
+/* ── Confirmation dialog ─────────────────────────────── */
+
+.confirmOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  z-index: 100;
+  backdrop-filter: blur(4px);
+}
+
+.confirmDialog {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 1.5rem;
+  width: 100%;
+  max-width: 360px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.confirmTitle {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.confirmBody {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.confirmActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 0.25rem;
+}

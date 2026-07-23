@@ -1,0 +1,109 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.table {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.tableHeader {
+  display: grid;
+  background: var(--card-light);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.tableRow {
+  display: grid;
+  border-top: 1px solid var(--border);
+  align-items: center;
+}
+
+.cell {
+  padding: 0.65rem 0.8rem;
+}
+
+.playerName {
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+/* Rank buttons */
+.rankBtns {
+  display: flex;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1.5px solid var(--border);
+}
+
+.rankBtn {
+  flex: 1;
+  padding: 0.4rem 0.25rem;
+  background: var(--card-light);
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  font-weight: 600;
+  border-radius: 0;
+  border: none;
+  border-right: 1px solid var(--border);
+  transition: background 0.1s, color 0.1s;
+  white-space: nowrap;
+}
+.rankBtn:last-child { border-right: none; }
+.rankBtn:hover:not(.rankBtnActive) { background: #2d3f55; color: var(--text); }
+.rankBtnActive { background: var(--green); color: #fff; }
+
+/* Royalties stepper */
+.stepper {
+  display: flex;
+  align-items: center;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.stepBtn {
+  background: var(--card-light);
+  color: var(--text-muted);
+  border: none;
+  border-radius: 0;
+  padding: 0.35rem 0.55rem;
+  font-size: 1rem;
+  line-height: 1;
+  font-weight: 700;
+  transition: background 0.1s, color 0.1s;
+}
+.stepBtn:hover { background: #2d3f55; color: var(--text); }
+
+.stepVal {
+  flex: 1;
+  text-align: center;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  min-width: 1.8rem;
+  border: none;
+  border-left: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+  border-radius: 0;
+  padding: 0.35rem 0.1rem;
+  background: var(--card);
+  -moz-appearance: textfield;
+}
+.stepVal::-webkit-outer-spin-button,
+.stepVal::-webkit-inner-spin-button { -webkit-appearance: none; }
+.stepVal::placeholder { color: var(--border); font-weight: 600; }
+.stepValPos { color: #4ade80; }
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+}
