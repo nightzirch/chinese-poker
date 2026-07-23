@@ -14,6 +14,7 @@ interface PlayerEntry {
   middle: number;
   back: number;
   royalties: number;
+  fouled: boolean;
 }
 
 const RANK_LABELS = ['1st', '2nd', '3rd', '4th'];
@@ -21,13 +22,28 @@ const RANK_LABELS = ['1st', '2nd', '3rd', '4th'];
 export function RoundEntry({ players, roundNumber, onSubmit }: Props) {
   const n = players.length;
   const [entries, setEntries] = useState<PlayerEntry[]>(
-    players.map(() => ({ front: 1, middle: 1, back: 1, royalties: 0 }))
+    players.map(() => ({ front: 1, middle: 1, back: 1, royalties: 0, fouled: false }))
   );
+
+  function toggleFoul(playerIdx: number) {
+    setEntries(prev => {
+      const next = [...prev];
+      const wasFouled = next[playerIdx].fouled;
+      next[playerIdx] = {
+        ...next[playerIdx],
+        fouled: !wasFouled,
+        front: wasFouled ? 1 : n,
+        middle: wasFouled ? 1 : n,
+        back: wasFouled ? 1 : n,
+      };
+      return next;
+    });
+  }
 
   function setRank(playerIdx: number, hand: 'front' | 'middle' | 'back', rank: number) {
     setEntries(prev => {
       const next = [...prev];
-      next[playerIdx] = { ...next[playerIdx], [hand]: rank };
+      next[playerIdx] = { ...next[playerIdx], [hand]: rank, fouled: false };
       return next;
     });
   }
@@ -53,13 +69,14 @@ export function RoundEntry({ players, roundNumber, onSubmit }: Props) {
     onSubmit(calculateRoundScores(players, entriesMap));
   }
 
-  const cols = `minmax(4rem, 1fr) repeat(3, minmax(5rem, 2fr)) minmax(7rem, 1.2fr)`;
+  const cols = `minmax(4rem, 1fr) minmax(4rem, auto) repeat(3, minmax(5rem, 2fr)) minmax(7rem, 1.2fr)`;
 
   return (
     <div className={styles.wrap}>
       <div className={styles.table}>
         <div className={styles.tableHeader} style={{ gridTemplateColumns: cols }}>
           <div className={styles.cell}>Player</div>
+          <div className={styles.cell}>Foul</div>
           <div className={styles.cell}>Front</div>
           <div className={styles.cell}>Middle</div>
           <div className={styles.cell}>Back</div>
@@ -67,8 +84,22 @@ export function RoundEntry({ players, roundNumber, onSubmit }: Props) {
         </div>
 
         {players.map((player, i) => (
-          <div key={player.id} className={styles.tableRow} style={{ gridTemplateColumns: cols }}>
+          <div
+            key={player.id}
+            className={`${styles.tableRow} ${entries[i].fouled ? styles.fouledRow : ''}`}
+            style={{ gridTemplateColumns: cols }}
+          >
             <div className={`${styles.cell} ${styles.playerName}`}>{player.name}</div>
+
+            <div className={`${styles.cell} ${styles.foulCell}`}>
+              <button
+                className={`${styles.foulBtn} ${entries[i].fouled ? styles.foulBtnActive : ''}`}
+                onClick={() => toggleFoul(i)}
+                title="Foul"
+              >
+                F
+              </button>
+            </div>
 
             {(['front', 'middle', 'back'] as const).map(hand => (
               <div key={hand} className={styles.cell}>
@@ -76,7 +107,7 @@ export function RoundEntry({ players, roundNumber, onSubmit }: Props) {
                   {Array.from({ length: n }, (_, k) => k + 1).map(rank => (
                     <button
                       key={rank}
-                      className={`${styles.rankBtn} ${entries[i][hand] === rank ? styles.rankBtnActive : ''}`}
+                      className={`${styles.rankBtn} ${entries[i][hand] === rank ? (entries[i].fouled ? styles.rankBtnFouled : styles.rankBtnActive) : ''}`}
                       onClick={() => setRank(i, hand, rank)}
                     >
                       {RANK_LABELS[rank - 1]}

@@ -36,6 +36,41 @@
   font-size: 0.95rem;
 }
 
+.fouledRow {
+  background: rgba(231, 76, 60, 0.07);
+}
+
+.foulCell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.foulBtn {
+  width: 1.7rem;
+  height: 1.7rem;
+  padding: 0.25rem;
+  border-radius: 6px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  background: transparent;
+  color: var(--text-muted);
+  border: 1.5px solid var(--border);
+  transition: background 0.1s, color 0.1s, border-color 0.1s;
+}
+.foulBtn:hover { border-color: var(--red); color: var(--red); }
+.foulBtnActive {
+  background: var(--red);
+  border-color: var(--red);
+  color: #fff;
+}
+
+.rankBtnFouled {
+  background: #5c1a1a;
+  color: #f87171;
+}
+
 /* Rank buttons */
 .rankBtns {
   display: flex;
