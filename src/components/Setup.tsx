@@ -26,7 +26,7 @@ export function Setup({ onStart }: Props) {
       <div className={styles.card}>
         <div className={styles.header}>
           <div className={styles.logo}>🀄</div>
-          <h1 className={styles.title}>Chinese Poker</h1>
+          <h1 className={styles.title}>Chinese Poker Scoring</h1>
           <p className={styles.subtitle}>Scorekeeper</p>
         </div>
 

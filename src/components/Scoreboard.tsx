@@ -69,7 +69,7 @@ export function Scoreboard({ game, onRoundSubmit, onNewGame }: Props) {
           <div className={styles.titleRow}>
             <span className={styles.logo}>🀄</span>
             <div>
-              <h1 className={styles.title}>Chinese Poker</h1>
+              <h1 className={styles.title}>Chinese Poker Scoring</h1>
               <span className={styles.roundCount}>{rounds.length} round{rounds.length !== 1 ? 's' : ''} played</span>
             </div>
           </div>
