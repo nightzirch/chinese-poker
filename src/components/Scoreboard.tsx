@@ -1,8 +1,9 @@
-import { useState } from 'react';
-import type { Game, PlayerRoundScore } from '../types';
+import { useState, useEffect } from 'react';
+import type { Game, PlayerRoundScore, EndCondition } from '../types';
 import { getRunningTotals, getDenseRanks } from '../scoring';
 import styles from './Scoreboard.module.css';
 import { RoundEntry } from './RoundEntry';
+import { ScoreChart } from './ScoreChart';
 
 interface Props {
   game: Game;
@@ -48,19 +49,72 @@ function fmt(n: number) {
   return (n > 0 ? '+' : '') + n;
 }
 
+function formatClock(ts: number) {
+  return new Date(ts).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+}
+
+function formatRemaining(ms: number) {
+  if (ms <= 0) return null;
+  const totalMin = Math.ceil(ms / 60000);
+  if (totalMin < 60) return `${totalMin}m left`;
+  const h = Math.floor(totalMin / 60);
+  const m = totalMin % 60;
+  return m === 0 ? `${h}h left` : `${h}h ${m}m left`;
+}
+
+function checkGameOver(ec: EndCondition, totals: Record<string, number>, roundCount: number, now: number, createdAt: number): boolean {
+  switch (ec.type) {
+    case 'points':   return Object.values(totals).some(t => t >= ec.target);
+    case 'rounds':   return roundCount >= ec.target;
+    case 'duration': return now >= createdAt + ec.minutes * 60000;
+    case 'clock':    return now >= ec.endTime;
+  }
+}
+
+function endConditionLabel(ec: EndCondition, totals: Record<string, number>, roundCount: number, now: number, createdAt: number): string {
+  switch (ec.type) {
+    case 'points': {
+      const best = Math.max(0, ...Object.values(totals));
+      return `First to ${ec.target} pts · Leading: ${fmt(best)}`;
+    }
+    case 'rounds':
+      return `Round ${roundCount} of ${ec.target}`;
+    case 'duration': {
+      const endTs = createdAt + ec.minutes * 60000;
+      const rem = formatRemaining(endTs - now);
+      return rem ? `Ends at ${formatClock(endTs)} · ${rem}` : `Ends at ${formatClock(endTs)}`;
+    }
+    case 'clock': {
+      const rem = formatRemaining(ec.endTime - now);
+      return rem ? `Ends at ${formatClock(ec.endTime)} · ${rem}` : `Ends at ${formatClock(ec.endTime)}`;
+    }
+  }
+}
+
+// Fallback for games saved before this feature was added
+const DEFAULT_END: EndCondition = { type: 'points', target: 100 };
+
 export function Scoreboard({ game, onRoundSubmit, onNewGame }: Props) {
-  const [confirming, setConfirming] = useState(false);
+  const [now, setNow] = useState(Date.now());
   const { players, rounds } = game;
+  const ec = game.endCondition ?? DEFAULT_END;
+
+  useEffect(() => {
+    if (ec.type !== 'duration' && ec.type !== 'clock') return;
+    const id = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(id);
+  }, [ec.type]);
   const playerIds = players.map(p => p.id);
   const totals = getRunningTotals(rounds, playerIds);
   const denseRanks = getDenseRanks(playerIds, totals);
+  const gameOver = rounds.length > 0 && checkGameOver(ec, totals, rounds.length, now, game.createdAt);
 
   const ranked = [...players].sort((a, b) => (totals[b.id] ?? 0) - (totals[a.id] ?? 0));
+  const winner = ranked.find(p => denseRanks[p.id] === 1);
 
   const showPodium = ranked.length >= 3;
-  // Podium order: 2nd slot left, 1st slot center, 3rd slot right
   const podiumOrder = showPodium ? [ranked[1], ranked[0], ranked[2]] : [];
-  const restPlayers = showPodium ? ranked.slice(3) : ranked;
+  const restPlayers = showPodium ? ranked.slice(3) : [];
 
   return (
     <>
@@ -70,13 +124,22 @@ export function Scoreboard({ game, onRoundSubmit, onNewGame }: Props) {
             <span className={styles.logo}>🀄</span>
             <div>
               <h1 className={styles.title}>Chinese Poker Scoring</h1>
-              <span className={styles.roundCount}>{rounds.length} round{rounds.length !== 1 ? 's' : ''} played</span>
+              <span className={styles.roundCount}>{rounds.length} round{rounds.length !== 1 ? 's' : ''} played · {endConditionLabel(ec, totals, rounds.length, now, game.createdAt)}</span>
             </div>
           </div>
-          <button className="btn-ghost" style={{ fontSize: '0.85rem', padding: '0.5rem 1rem' }} onClick={() => setConfirming(true)}>
-            New Game
+          <button className="btn-ghost" style={{ fontSize: '0.85rem', padding: '0.5rem 1rem' }} onClick={onNewGame}>
+            Back
           </button>
         </div>
+
+        {gameOver && (
+          <div className={styles.gameOverBanner}>
+            <span className={styles.gameOverTitle}>Game over</span>
+            {winner && (
+              <span className={styles.gameOverWinner}>🏆 {winner.name} wins!</span>
+            )}
+          </div>
+        )}
 
         {showPodium ? (
           <div className={styles.podiumWrap}>
@@ -203,6 +266,13 @@ export function Scoreboard({ game, onRoundSubmit, onNewGame }: Props) {
           </div>
         )}
 
+        {rounds.length > 0 && (
+          <div className={styles.section}>
+            <h2 className={styles.sectionTitle}>Score Timeline</h2>
+            <ScoreChart players={players} rounds={rounds} />
+          </div>
+        )}
+
         <div className={styles.section}>
           <h2 className={styles.sectionTitle}>Royalties</h2>
           <div className={styles.historyTable}>
@@ -227,19 +297,6 @@ export function Scoreboard({ game, onRoundSubmit, onNewGame }: Props) {
 
       </div>
 
-      {confirming && (
-
-        <div className={styles.confirmOverlay}>
-          <div className={styles.confirmDialog}>
-            <h3 className={styles.confirmTitle}>Start a new game?</h3>
-            <p className={styles.confirmBody}>The current game will stay in history, but you'll leave this scoreboard.</p>
-            <div className={styles.confirmActions}>
-              <button className="btn-ghost" onClick={() => setConfirming(false)}>Cancel</button>
-              <button className="btn-danger" onClick={() => { setConfirming(false); onNewGame(); }}>New Game</button>
-            </div>
-          </div>
-        </div>
-      )}
     </>
   );
 }

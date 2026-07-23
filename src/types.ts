@@ -21,11 +21,16 @@ export interface Round {
   scores: PlayerRoundScore[];
 }
 
+export type EndCondition =
+  | { type: 'points';   target: number }
+  | { type: 'rounds';   target: number }
+  | { type: 'duration'; minutes: number }
+  | { type: 'clock';    endTime: number };
+
 export interface Game {
   id: string;
   players: Player[];
   rounds: Round[];
   createdAt: number;
+  endCondition: EndCondition;
 }
-
-export type Screen = 'setup' | 'game' | 'history';

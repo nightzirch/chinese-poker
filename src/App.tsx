@@ -1,4 +1,4 @@
-import type { Game, Player, PlayerRoundScore } from './types';
+import type { Game, Player, PlayerRoundScore, EndCondition } from './types';
 import { Setup } from './components/Setup';
 import { Scoreboard } from './components/Scoreboard';
 import { useLocalStorage } from './useLocalStorage';
@@ -9,12 +9,13 @@ export default function App() {
 
   const currentGame = games.find(g => g.id === currentGameId) ?? null;
 
-  function handleStart(players: Player[]) {
+  function handleStart(players: Player[], endCondition: EndCondition) {
     const game: Game = {
       id: crypto.randomUUID(),
       players,
       rounds: [],
       createdAt: Date.now(),
+      endCondition,
     };
     setGames(prev => [...prev, game]);
     setCurrentGameId(game.id);
@@ -31,7 +32,14 @@ export default function App() {
   }
 
   if (!currentGame) {
-    return <Setup onStart={handleStart} />;
+    return (
+      <Setup
+        games={games}
+        onStart={handleStart}
+        onResume={setCurrentGameId}
+        onDelete={id => setGames(prev => prev.filter(g => g.id !== id))}
+      />
+    );
   }
 
   return (

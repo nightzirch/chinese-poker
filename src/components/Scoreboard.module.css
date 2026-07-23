@@ -32,6 +32,40 @@
   color: var(--text-muted);
 }
 
+.endStatus {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  opacity: 0.75;
+}
+
+/* ── Game over ───────────────────────────────────────── */
+
+.gameOverBanner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  background: linear-gradient(135deg, #1a2e1a, #1e2d1e);
+  border: 1px solid var(--green-light);
+  border-radius: 14px;
+  padding: 1.25rem 1.5rem;
+  text-align: center;
+}
+
+.gameOverTitle {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--green-light);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.gameOverWinner {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--gold);
+}
+
 /* ── Podium ──────────────────────────────────────────── */
 
 .podiumWrap {
